@@ -16,7 +16,7 @@ O **Local Eats** nasce da necessidade de organizar o fluxo de pedidos em lanchon
 ## 🛠️ Roadmap de Desenvolvimento
 - [x] Configuração inicial do projeto (Spring Initializr)
 - [x] Repositório configurado com licença MIT 
-- [] Modelagem de Produtos (Lanches e Bebidas) usando Herança
+- [x] Modelagem de Produtos (Lanches e Bebidas) usando Herança
 - [] Implementação da classe Cliente (Gestão de entregas)
 - [] Persistência de dados com MySQL e Spring Data JPA
 - [] Criação dos Endpoints para listagem de cardápio e pedidos
