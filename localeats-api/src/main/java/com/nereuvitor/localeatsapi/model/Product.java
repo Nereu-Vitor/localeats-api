@@ -11,6 +11,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -36,12 +39,15 @@ public abstract class Product implements Serializable {
     private Long id;
 
     @Column(name = "name", nullable = false)
+    @NotBlank(message = "O nome é obrigatório")
     private String name;
 
     @Column(name = "description")
     private String description;
 
     @Column(name = "price", nullable = false)
+    @NotNull(message = "O preço é obrigatório")
+    @DecimalMin(value = "0.01", message = "O preço deve ser maior que zero")
     private BigDecimal price;
 
 }
