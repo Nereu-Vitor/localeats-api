@@ -27,13 +27,15 @@ import lombok.Setter;
 @Table(name = User.TABLE_NAME)
 public class User implements Serializable {
 
+    public static final String TABLE_NAME = "user";
+
+    private static final long serialVersionUID = 1L; 
+
     public interface CreateUser {
     }
 
     public interface UpdateUser {
     }
-
-    public static final String TABLE_NAME = "user";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
