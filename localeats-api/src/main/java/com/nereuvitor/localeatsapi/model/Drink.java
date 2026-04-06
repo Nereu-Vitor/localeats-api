@@ -1,5 +1,6 @@
 package com.nereuvitor.localeatsapi.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
@@ -23,9 +24,11 @@ public class Drink extends Product {
 
     public static final String TABLE_NAME = "drink";
     
+    @Column(name = "volume_ml", nullable = false)
     @NotNull(message = "O volume em ml é obrigatório")
     private Integer volumeMl;
 
+    @Column(name = "drink_type", nullable = false)
     @NotBlank(message = "O tipo da bebida é obrigatório")
     private String drinkType;
 

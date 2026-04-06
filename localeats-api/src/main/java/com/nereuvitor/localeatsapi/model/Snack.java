@@ -1,5 +1,6 @@
 package com.nereuvitor.localeatsapi.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
@@ -22,9 +23,11 @@ public class Snack extends Product {
 
     public static final String TABLE_NAME = "snack";
 
+    @Column(name = "ingredients", nullable = false)
     @NotBlank(message = "A lista de ingredientes é obrigatória")
     private String ingredients;
 
+    @Column(name = "is_vegan")
     private Boolean isVegan = false;
     
 }
