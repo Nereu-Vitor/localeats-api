@@ -17,8 +17,8 @@ O **Local Eats** nasce da necessidade de organizar o fluxo de pedidos em lanchon
 - [x] Configuração inicial do projeto (Spring Boot + MySQL)
 - [x] Mapeamento da hierarquia de Produtos (Herança: Drink e Snack)
 - [x] Criação da entidade User com grupos de validação
-- [x] Implementação dos JpaRepositories (User, Product, Drink, Snack)
-- [ ] Criação da entidade Order (Pedido) e relação ManyToMany
+- [x] Implementação dos JpaRepositories (User, Product, Drink, Snack e Order)
+- [x] Criação da entidade Order (Pedido) e relação ManyToMany
 - [ ] Desenvolvimento dos Services e Regras de Negócio
 - [ ] Criação dos Controllers (Endpoints da API)
 
