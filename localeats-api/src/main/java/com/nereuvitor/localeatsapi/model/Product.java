@@ -46,7 +46,7 @@ public abstract class Product implements Serializable {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "price", nullable = false)
+    @Column(name = "price", precision = 10, scale = 2, nullable = false)
     @NotNull(message = "O preço é obrigatório")
     @DecimalMin(value = "0.01", message = "O preço deve ser maior que zero")
     private BigDecimal price;
