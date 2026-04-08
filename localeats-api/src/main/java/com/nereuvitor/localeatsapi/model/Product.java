@@ -39,11 +39,11 @@ public abstract class Product implements Serializable {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", length = 100, nullable = false)
     @NotBlank(message = "O nome é obrigatório")
     private String name;
 
-    @Column(name = "description")
+    @Column(name = "description", length = 500)
     private String description;
 
     @Column(name = "price", precision = 10, scale = 2, nullable = false)

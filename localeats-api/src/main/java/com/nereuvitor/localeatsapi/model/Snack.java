@@ -23,7 +23,7 @@ public class Snack extends Product {
 
     public static final String TABLE_NAME = "snack";
 
-    @Column(name = "ingredients", nullable = false)
+    @Column(name = "ingredients", length = 500, nullable = false)
     @NotBlank(message = "A lista de ingredientes é obrigatória")
     private String ingredients;
 

@@ -28,7 +28,7 @@ public class Drink extends Product {
     @NotNull(message = "O volume em ml é obrigatório")
     private Integer volumeMl;
 
-    @Column(name = "drink_type", nullable = false)
+    @Column(name = "drink_type", length = 50, nullable = false)
     @NotBlank(message = "O tipo da bebida é obrigatório")
     private String drinkType;
 
