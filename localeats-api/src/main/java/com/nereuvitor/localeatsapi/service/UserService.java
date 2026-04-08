@@ -23,9 +23,9 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public User findById(Long id) {
-        return userRepository.findById(id).orElseThrow(() -> new RuntimeException(
-            "Usuário não encontrado! Id: " + id
-        ));
+        return userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException(
+                    "Usuário não encontrado! Id: " + id));
     }
 
     @Transactional
@@ -47,9 +47,9 @@ public class UserService {
     }
 
     private void updateData(User entity, User obj) {
-        entity.setName(obj.getName());        
-        entity.setUsername(obj.getUsername());        
-        entity.setPhone(obj.getPhone());        
-        entity.setEmail(obj.getEmail());        
+        entity.setName(obj.getName());
+        entity.setUsername(obj.getUsername());
+        entity.setPhone(obj.getPhone());
+        entity.setEmail(obj.getEmail());
     }
 }

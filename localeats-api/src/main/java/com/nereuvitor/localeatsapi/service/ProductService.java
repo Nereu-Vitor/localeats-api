@@ -23,9 +23,9 @@ public class ProductService {
 
     @Transactional(readOnly = true)
     public Product findById(Long id) {
-        return productRepository.findById(id).orElseThrow(() -> new RuntimeException(
-            "Produto não encontrado! Id: " + id
-        ));
+        return productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException(
+                    "Produto não encontrado! Id: " + id));
     }
 
     @Transactional
