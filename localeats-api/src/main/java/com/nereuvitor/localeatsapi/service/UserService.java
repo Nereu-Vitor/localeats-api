@@ -14,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserService {
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Transactional(readOnly = true)
     public List<User> findAll() {
@@ -25,7 +25,7 @@ public class UserService {
     public User findById(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException(
-                    "Usuário não encontrado! Id: " + id));
+                        "Usuário não encontrado! Id: " + id));
     }
 
     @Transactional
@@ -34,8 +34,8 @@ public class UserService {
     }
 
     @Transactional
-    public User update(User obj) {
-        User entity = findById(obj.getId());
+    public User update(Long id, User obj) {
+        User entity = findById(id);
         updateData(entity, obj);
         return userRepository.save(entity);
     }
