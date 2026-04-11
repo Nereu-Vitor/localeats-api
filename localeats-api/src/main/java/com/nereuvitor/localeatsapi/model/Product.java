@@ -14,6 +14,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -50,5 +51,9 @@ public abstract class Product implements Serializable {
     @NotNull(message = "O preço é obrigatório")
     @DecimalMin(value = "0.01", message = "O preço deve ser maior que zero")
     private BigDecimal price;
+
+    @Column(name = "img_url", length = 500)
+    @Size(max = 500, message = "O link da imagem deve ter no máximo 500 caracteres")
+    private String imgUrl;
 
 }

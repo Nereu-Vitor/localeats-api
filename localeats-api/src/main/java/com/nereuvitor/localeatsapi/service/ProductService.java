@@ -25,7 +25,7 @@ public class ProductService {
     public Product findById(Long id) {
         return productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException(
-                    "Produto não encontrado! Id: " + id));
+                        "Produto não encontrado! Id: " + id));
     }
 
     @Transactional
@@ -34,8 +34,8 @@ public class ProductService {
     }
 
     @Transactional
-    public Product update(Product obj) {
-        Product entity = findById(obj.getId());
+    public Product update(Long id, Product obj) {
+        Product entity = findById(id);
         updateData(entity, obj);
         return productRepository.save(entity);
     }
@@ -50,5 +50,6 @@ public class ProductService {
         entity.setName(obj.getName());
         entity.setDescription(obj.getDescription());
         entity.setPrice(obj.getPrice());
+        entity.setImgUrl(obj.getImgUrl());
     }
 }
