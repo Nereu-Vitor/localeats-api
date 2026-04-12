@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.nereuvitor.localeatsapi.model.Product;
 import com.nereuvitor.localeatsapi.model.Snack;
 import com.nereuvitor.localeatsapi.service.SnackService;
 
@@ -39,7 +38,7 @@ public class SnackController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Product> update(
+    public ResponseEntity<Snack> update(
             @PathVariable @Min(1) Long id,
             @Valid @RequestBody Snack obj) {
         obj = snackService.update(id, obj);
