@@ -32,4 +32,8 @@ public class Drink extends Product {
     @NotBlank(message = "O tipo da bebida é obrigatório")
     private String drinkType;
 
+    @Column(name = "is_alcoholic", nullable = false)
+    @NotNull(message = "O campo alcoólico é obrigatório")
+    private Boolean isAlcoholic;
+    
 }
