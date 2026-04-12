@@ -38,7 +38,7 @@ public class Order implements Serializable {
 
     public static final String TABLE_NAME = "orders";
 
-    private static final long serialVersionUID = 1L; 
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,27 +46,21 @@ public class Order implements Serializable {
     private Long id;
 
     @Column(name = "order_date", nullable = false)
-    @NotNull(message = "A data do pedido é obrigatória")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")    
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
     private LocalDateTime orderDate;
-    
+
     @Column(name = "total_price", precision = 10, scale = 2, nullable = false)
-    @NotNull(message = "O preço total deve ser informado")
     @DecimalMin(value = "0.01", message = "O preço do pedido deve ser maior que zero")
     private BigDecimal totalPrice;
 
-    @NotNull(message = "O pedido deve estar associado a um usuário")    
+    @NotNull(message = "O pedido deve estar associado a um usuário")
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @NotEmpty(message = "Um pedido deve ter pelo menos um produto")
     @ManyToMany
-    @JoinTable(
-        name = "order_product",
-        joinColumns = @JoinColumn(name = "order_id"),
-        inverseJoinColumns = @JoinColumn(name = "product_id")
-    )
+    @JoinTable(name = "order_product", joinColumns = @JoinColumn(name = "order_id"), inverseJoinColumns = @JoinColumn(name = "product_id"))
     private List<Product> products = new ArrayList<>();
 
 }

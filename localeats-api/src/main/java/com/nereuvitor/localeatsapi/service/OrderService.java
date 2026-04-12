@@ -2,6 +2,7 @@ package com.nereuvitor.localeatsapi.service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -42,10 +43,15 @@ public class OrderService {
         obj.setOrderDate(LocalDateTime.now());
 
         BigDecimal sum = BigDecimal.ZERO;
+        List<Product> productsFromDb = new ArrayList<>();
+
         for (Product p : obj.getProducts()) {
-            Product productFromDB = productService.findById(p.getId());
-            sum = sum.add(productFromDB.getPrice());
+            Product product = productService.findById(p.getId());
+            sum = sum.add(product.getPrice());
+            productsFromDb.add(product);
         }                
+
+        obj.setProducts(productsFromDb);
         obj.setTotalPrice(sum);
 
         return orderRepository.save(obj);

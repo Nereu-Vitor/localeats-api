@@ -3,6 +3,9 @@ package com.nereuvitor.localeatsapi.model;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -29,6 +32,14 @@ import lombok.Setter;
 @Entity
 @Table(name = Product.TABLE_NAME)
 @Inheritance(strategy = InheritanceType.JOINED)
+@JsonTypeInfo(
+    use = JsonTypeInfo.Id.NAME,
+    include = JsonTypeInfo.As.PROPERTY,
+    property = "type")
+@JsonSubTypes({
+    @JsonSubTypes.Type(value = Snack.class, name = "snack"),
+    @JsonSubTypes.Type(value = Drink.class, name = "drink")
+})    
 public abstract class Product implements Serializable {
 
     public static final String TABLE_NAME = "product";
