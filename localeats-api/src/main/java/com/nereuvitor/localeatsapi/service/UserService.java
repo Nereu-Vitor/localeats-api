@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.nereuvitor.localeatsapi.model.User;
 import com.nereuvitor.localeatsapi.repository.UserRepository;
+import com.nereuvitor.localeatsapi.service.exceptions.ObjectNotFoundException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -24,7 +25,7 @@ public class UserService {
     @Transactional(readOnly = true)
     public User findById(Long id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException(
+                .orElseThrow(() -> new ObjectNotFoundException(
                         "Usuário não encontrado! Id: " + id));
     }
 

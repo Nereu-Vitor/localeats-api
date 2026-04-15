@@ -12,6 +12,7 @@ import com.nereuvitor.localeatsapi.model.Order;
 import com.nereuvitor.localeatsapi.model.Product;
 import com.nereuvitor.localeatsapi.model.User;
 import com.nereuvitor.localeatsapi.repository.OrderRepository;
+import com.nereuvitor.localeatsapi.service.exceptions.ObjectNotFoundException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -31,7 +32,7 @@ public class OrderService {
     @Transactional(readOnly = true)
     public Order findById(Long id) {
         return orderRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException(
+                .orElseThrow(() -> new ObjectNotFoundException(
                     "Pedido não encontrado! Id: " + id));
     }
 

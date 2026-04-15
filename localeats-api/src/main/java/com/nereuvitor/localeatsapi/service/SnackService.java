@@ -5,6 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.nereuvitor.localeatsapi.model.Snack;
 import com.nereuvitor.localeatsapi.repository.SnackRepository;
+import com.nereuvitor.localeatsapi.service.exceptions.ObjectNotFoundException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,7 +23,7 @@ public class SnackService {
     @Transactional
     public Snack update(Long id, Snack obj) {
         Snack entity = snackRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException(
+                .orElseThrow(() -> new ObjectNotFoundException(
                         "Lanche não encontrado! Id: " + id));
         updateData(entity, obj);
         return snackRepository.save(entity);

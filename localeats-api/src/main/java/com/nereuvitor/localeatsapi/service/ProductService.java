@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.nereuvitor.localeatsapi.model.Product;
 import com.nereuvitor.localeatsapi.repository.ProductRepository;
+import com.nereuvitor.localeatsapi.service.exceptions.ObjectNotFoundException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -24,7 +25,7 @@ public class ProductService {
     @Transactional(readOnly = true)
     public Product findById(Long id) {
         return productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException(
+                .orElseThrow(() -> new ObjectNotFoundException(
                         "Produto não encontrado! Id: " + id));
     }
 

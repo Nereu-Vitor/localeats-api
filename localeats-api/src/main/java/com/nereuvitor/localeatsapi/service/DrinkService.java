@@ -5,6 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.nereuvitor.localeatsapi.model.Drink;
 import com.nereuvitor.localeatsapi.repository.DrinkRepository;
+import com.nereuvitor.localeatsapi.service.exceptions.ObjectNotFoundException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,7 +23,7 @@ public class DrinkService {
     @Transactional
     public Drink update(Long id, Drink obj) {
         Drink entity = drinkRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException(
+                .orElseThrow(() -> new ObjectNotFoundException(
                         "Bebida não encontrada! Id: " + id));
         updateData(entity, obj);
         return drinkRepository.save(entity);
@@ -37,5 +38,5 @@ public class DrinkService {
         entity.setVolumeMl(obj.getVolumeMl());
         entity.setIsAlcoholic(obj.getIsAlcoholic());
     }
-    
+
 }
