@@ -2,13 +2,13 @@ package com.nereuvitor.localeatsapi.service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.nereuvitor.localeatsapi.model.Order;
+import com.nereuvitor.localeatsapi.model.OrderItem;
 import com.nereuvitor.localeatsapi.model.Product;
 import com.nereuvitor.localeatsapi.model.User;
 import com.nereuvitor.localeatsapi.repository.OrderRepository;
@@ -43,18 +43,22 @@ public class OrderService {
 
         obj.setOrderDate(LocalDateTime.now());
 
-        BigDecimal sum = BigDecimal.ZERO;
-        List<Product> productsFromDb = new ArrayList<>();
+        BigDecimal total = BigDecimal.ZERO;
+        
+        for (OrderItem item : obj.getItems()) {
+            Long productId = item.getProduct().getId();
 
-        for (Product p : obj.getProducts()) {
-            Product product = productService.findById(p.getId());
-            sum = sum.add(product.getPrice());
-            productsFromDb.add(product);
-        }                
+            Product product = productService.findById(productId);
+            item.setProduct(product);
+            item.setOrder(obj);
 
-        obj.setProducts(productsFromDb);
-        obj.setTotalPrice(sum);
+            BigDecimal precoVenda = (product.getOnPromotion() && product.getPromotionalPrice() != null) ? product.getPromotionalPrice() : product.getPrice();
 
+            item.setPrice(precoVenda);
+            total = total.add(item.getSubTotal());
+        }
+
+        obj.setTotalPrice(total);
         return orderRepository.save(obj);
     }
 
