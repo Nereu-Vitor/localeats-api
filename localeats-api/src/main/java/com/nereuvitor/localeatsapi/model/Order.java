@@ -8,15 +8,15 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotEmpty;
@@ -58,9 +58,8 @@ public class Order implements Serializable {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @NotEmpty(message = "Um pedido deve ter pelo menos um produto")
-    @ManyToMany
-    @JoinTable(name = "order_product", joinColumns = @JoinColumn(name = "order_id"), inverseJoinColumns = @JoinColumn(name = "product_id"))
-    private List<Product> products = new ArrayList<>();
+    @NotEmpty(message = "O pedido deve ter pelo menos um item")
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)    
+    private List<OrderItem> items = new ArrayList<>();
 
 }

@@ -22,7 +22,7 @@ import lombok.Setter;
 @PrimaryKeyJoinColumn(name = "id")
 public class Snack extends Product {
 
-    public static final String TABLE_NAME = "snack";
+    public static final String TABLE_NAME = "snacks";
 
     @Column(name = "ingredients", length = 500, nullable = false)
     @NotBlank(message = "A lista de ingredientes é obrigatória")

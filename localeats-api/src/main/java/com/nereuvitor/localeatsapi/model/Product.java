@@ -32,19 +32,16 @@ import lombok.Setter;
 @Entity
 @Table(name = Product.TABLE_NAME)
 @Inheritance(strategy = InheritanceType.JOINED)
-@JsonTypeInfo(
-    use = JsonTypeInfo.Id.NAME,
-    include = JsonTypeInfo.As.PROPERTY,
-    property = "type")
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type", visible = true, defaultImpl = Snack.class)
 @JsonSubTypes({
-    @JsonSubTypes.Type(value = Snack.class, name = "snack"),
-    @JsonSubTypes.Type(value = Drink.class, name = "drink")
-})    
+        @JsonSubTypes.Type(value = Snack.class, name = "snack"),
+        @JsonSubTypes.Type(value = Drink.class, name = "drink")
+})
 public abstract class Product implements Serializable {
 
-    public static final String TABLE_NAME = "product";
+    public static final String TABLE_NAME = "products";
 
-    private static final long serialVersionUID = 1L; 
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -62,6 +59,12 @@ public abstract class Product implements Serializable {
     @NotNull(message = "O preço é obrigatório")
     @DecimalMin(value = "0.01", message = "O preço deve ser maior que zero")
     private BigDecimal price;
+
+    @Column(name = "promotional_price", precision = 10, scale = 2)
+    private BigDecimal promotionalPrice;
+
+    @Column(name = "on_promotion")
+    private Boolean onPromotion = false;
 
     @Column(name = "img_url", length = 500)
     @Size(max = 500, message = "O link da imagem deve ter no máximo 500 caracteres")
