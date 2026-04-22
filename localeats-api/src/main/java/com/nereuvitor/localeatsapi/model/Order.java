@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.nereuvitor.localeatsapi.model.enums.OrderStatus;
+import com.nereuvitor.localeatsapi.model.enums.PaymentMethod;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -59,7 +61,33 @@ public class Order implements Serializable {
     private User user;
 
     @NotEmpty(message = "O pedido deve ter pelo menos um item")
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)    
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> items = new ArrayList<>();
+
+    @Column(name = "status")
+    private Integer status;
+
+    @Column(name = "payment_method")
+    private Integer paymentMethod;
+
+    public OrderStatus getStatus() {
+        return OrderStatus.toEnum(status);
+    }
+
+    public void setStatus(OrderStatus status) {
+        if (status != null) {
+            this.status = status.getCode();
+        }
+    }
+
+    public PaymentMethod getPaymentMethod() {
+        return PaymentMethod.toEnum(paymentMethod);
+    }
+
+    public void setPaymentMethod(PaymentMethod method) {
+        if (method != null) {
+            this.paymentMethod = method.getCode();
+        }
+    }
 
 }

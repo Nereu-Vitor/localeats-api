@@ -11,6 +11,7 @@ import com.nereuvitor.localeatsapi.model.Order;
 import com.nereuvitor.localeatsapi.model.OrderItem;
 import com.nereuvitor.localeatsapi.model.Product;
 import com.nereuvitor.localeatsapi.model.User;
+import com.nereuvitor.localeatsapi.model.enums.OrderStatus;
 import com.nereuvitor.localeatsapi.repository.OrderRepository;
 import com.nereuvitor.localeatsapi.service.exceptions.ObjectNotFoundException;
 
@@ -42,6 +43,8 @@ public class OrderService {
         obj.setUser(user);
 
         obj.setOrderDate(LocalDateTime.now());
+
+        obj.setStatus(OrderStatus.PENDING);
 
         BigDecimal total = BigDecimal.ZERO;
         
