@@ -19,8 +19,12 @@ O **Local Eats** nasce da necessidade de organizar o fluxo de pedidos em lanchon
 - [x] Criação da entidade User com grupos de validação
 - [x] Implementação dos JpaRepositories (User, Product, Drink, Snack e Order)
 - [x] Criação da entidade Order (Pedido) e relação ManyToMany
-- [ ] Desenvolvimento dos Services e Regras de Negócio
-- [ ] Criação dos Controllers (Endpoints da API)
+- [x] Desenvolvimento dos Services e Regras de Negócio
+- [x] Criação dos Controllers (Endpoints da API)
+- [ ] Implementação de Endereços (`Address`) e vínculos com Usuário
+- [ ] Gerencimaneto de Status de Pedido (`OrderStatus`) e Formas de Pagamento (`PaymentMethod`)
+- [ ] Lógica de Taxa de Entrega (Fixa ou por Bairro)
+- [ ] Configuração de Segurança e Autenticação (Spring Security + JWT)
 
 ## 👨‍💻️ Sobre o Autor
 **Nereu Vítor Pereira Lima**
