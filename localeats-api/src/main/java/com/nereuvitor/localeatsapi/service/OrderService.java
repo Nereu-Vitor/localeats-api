@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.nereuvitor.localeatsapi.model.Address;
 import com.nereuvitor.localeatsapi.model.Order;
 import com.nereuvitor.localeatsapi.model.OrderItem;
 import com.nereuvitor.localeatsapi.model.Product;
@@ -24,6 +25,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final UserService userService;
     private final ProductService productService;
+    private final AddressService addressService;
 
     @Transactional(readOnly = true)
     public List<Order> findAll() {
@@ -42,8 +44,13 @@ public class OrderService {
         User user = userService.findById(obj.getUser().getId());
         obj.setUser(user);
 
-        obj.setOrderDate(LocalDateTime.now());
+        Address address = addressService.findById(obj.getDeliveryAddress().getId());        
+        obj.setDeliveryAddress(address);
 
+        BigDecimal deliveryFee = calculateFee(address.getNeighborhood());
+        obj.setDeliveryFee(deliveryFee);
+        
+        obj.setOrderDate(LocalDateTime.now());
         obj.setStatus(OrderStatus.PENDING);
 
         BigDecimal total = BigDecimal.ZERO;
@@ -61,14 +68,43 @@ public class OrderService {
             total = total.add(item.getSubTotal());
         }
 
-        obj.setTotalPrice(total);
+        obj.setTotalPrice(total.add(deliveryFee));
         return orderRepository.save(obj);
+    }
+
+    @Transactional
+    public Order updateStatus(Long id, OrderStatus status) {
+        Order entity = findById(id);
+        entity.setStatus(status);
+        return orderRepository.save(entity);
     }
 
     @Transactional
     public void delete(Long id) {
         Order entity = findById(id);
         orderRepository.delete(entity);
+    }
+
+    private BigDecimal calculateFee(String neighborhood) {
+        if (neighborhood == null || neighborhood.isBlank()) {
+            return new BigDecimal("5.00");
+        }
+        
+        String n = neighborhood.trim().toLowerCase();
+        
+        if (n.contains("centro") || n.contains("matriz")) {
+            return new BigDecimal("2.00");            
+        }
+        
+        if (n.contains("cohab") || n.contains("alto") || n.contains("loteamento")) {
+            return new BigDecimal("4.00");                        
+        }
+        
+        if (n.contains("rural") || n.contains("sitio") || n.contains("povoado")) {
+            return new BigDecimal("10.00");                        
+        }
+
+        return new BigDecimal("3.00");
     }
 
 }

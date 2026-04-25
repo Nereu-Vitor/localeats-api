@@ -60,6 +60,10 @@ public abstract class Product implements Serializable {
     @DecimalMin(value = "0.01", message = "O preço deve ser maior que zero")
     private BigDecimal price;
 
+    @Column(name = "active", nullable = false)
+    @NotNull(message = "O status de atividade é obrigatório")
+    private Boolean active = true;
+
     @Column(name = "promotional_price", precision = 10, scale = 2)
     private BigDecimal promotionalPrice;
 
