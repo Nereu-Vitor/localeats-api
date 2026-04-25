@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.nereuvitor.localeatsapi.model.validation.Create;
+import com.nereuvitor.localeatsapi.model.validation.Update;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -36,40 +38,35 @@ public class User implements Serializable {
 
     private static final long serialVersionUID = 1L; 
 
-    public interface CreateUser {
-    }
-
-    public interface UpdateUser {
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
     @Column(name = "name", nullable = false)
-    @NotBlank(message = "O nome completo é obrigatório")
-    @Size(min = 2, max = 100)
+    @NotBlank(message = "O nome completo é obrigatório", groups = {Create.class, Update.class})
+    @Size(groups = {Create.class, Update.class}, min = 2, max = 100)
     private String name;
     
     @Column(name = "username", length = 100, nullable = false, unique = true)
-    @NotBlank(message = "O nome de usuário é obrigatório", groups = CreateUser.class)
-    @Size(groups = CreateUser.class, min = 2, max = 100)
+    @NotBlank(message = "O nome de usuário é obrigatório", groups = {Create.class, Update.class})
+    @Size(groups = {Create.class, Update.class}, min = 2, max = 100)
     private String username;
     
     @Column(name = "password", length = 60, nullable = false)
-    @NotBlank(message = "A senha é obrigatória", groups = { CreateUser.class, UpdateUser.class })
-    @Size(groups = { CreateUser.class, UpdateUser.class }, min = 8, max = 60)
+    @NotBlank(message = "A senha é obrigatória", groups = {Create.class, Update.class})
+    @Size(groups = { Create.class, Update.class }, min = 8, max = 60)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
     
     @Column(name = "phone", length = 25, nullable = false)
-    @NotBlank(message = "O telefone é obrigatório")
+    @NotBlank(message = "O telefone é obrigatório", groups = Create.class)
+    @Size(groups = {Create.class, Update.class}, min = 8, max = 25)
     private String phone;
     
     @Column(name = "email", length = 100, nullable = false, unique = true)
-    @NotBlank(message = "O e-mail é obrigatório")
-    @Email(message = "Insira um e-mail válido")
+    @NotBlank(message = "O e-mail é obrigatório", groups = Create.class)
+    @Email(message = "Insira um e-mail válido", groups = {Create.class, Update.class})
     private String email;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)

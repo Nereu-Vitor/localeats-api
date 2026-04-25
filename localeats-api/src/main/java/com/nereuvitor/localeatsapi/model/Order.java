@@ -9,6 +9,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.nereuvitor.localeatsapi.model.enums.OrderStatus;
 import com.nereuvitor.localeatsapi.model.enums.PaymentMethod;
+import com.nereuvitor.localeatsapi.model.validation.Create;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -55,12 +56,21 @@ public class Order implements Serializable {
     @DecimalMin(value = "0.01", message = "O preço do pedido deve ser maior que zero")
     private BigDecimal totalPrice;
 
-    @NotNull(message = "O pedido deve estar associado a um usuário")
+    @NotNull(groups = Create.class, message = "O pedido deve estar associado a um usuário")
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @NotEmpty(message = "O pedido deve ter pelo menos um item")
+    @NotNull(groups = Create.class, message = "O endereço de entrega é obrigatório")
+    @ManyToOne
+    @JoinColumn(name = "address_id", nullable = false)
+    private Address deliveryAddress;
+    
+    @Column(name = "delivery_fee", precision = 10, scale = 2, nullable = false)
+    @DecimalMin(value = "0.00", message = "A taxa de entrega deve ser maior que zero")
+    private BigDecimal deliveryFee;
+
+    @NotEmpty(groups = Create.class, message = "O pedido deve ter pelo menos um item")
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> items = new ArrayList<>();
 
