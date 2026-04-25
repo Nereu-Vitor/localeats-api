@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,9 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.nereuvitor.localeatsapi.model.Order;
+import com.nereuvitor.localeatsapi.model.enums.OrderStatus;
+import com.nereuvitor.localeatsapi.model.validation.Create;
 import com.nereuvitor.localeatsapi.service.OrderService;
 
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 
@@ -42,13 +44,19 @@ public class OrderController {
     }
 
     @PostMapping
-    public ResponseEntity<Order> create(@Valid @RequestBody Order obj) {
+    public ResponseEntity<Order> create(@Validated(Create.class) @RequestBody Order obj) {
         obj = orderService.insert(obj);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(obj.getId())
                 .toUri();
         return ResponseEntity.created(uri).body(obj);
+    }
+
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<Order> updateStatus(@PathVariable @Min(1) Long id, @RequestBody OrderStatus status) {
+        Order obj = orderService.updateStatus(id, status);
+        return ResponseEntity.ok().body(obj);
     }
 
     @DeleteMapping("/{id}")

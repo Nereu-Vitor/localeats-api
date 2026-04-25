@@ -13,7 +13,8 @@ public enum OrderStatus {
     PREPARING(2, "Em Preparação"),
     SHIPPED(3, "Saiu para Entrega"),
     DELIVERED(4, "Entregue"),
-    CANCELED(5, "Cancelado");
+    CANCELED(5, "Cancelado"),
+    DELIVERY_FAILED(6, "Entrega Falhou");
 
     private final int code;
     @JsonValue
