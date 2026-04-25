@@ -10,11 +10,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.nereuvitor.localeatsapi.model.User;
-import com.nereuvitor.localeatsapi.model.User.CreateUser;
-import com.nereuvitor.localeatsapi.model.User.UpdateUser;
+import com.nereuvitor.localeatsapi.model.validation.Create;
+import com.nereuvitor.localeatsapi.model.validation.Update;
 import com.nereuvitor.localeatsapi.service.UserService;
 
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 
@@ -45,9 +44,8 @@ public class UserController {
         return ResponseEntity.ok().body(obj);
     }
 
-    @PostMapping
-    @Validated(CreateUser.class)
-    public ResponseEntity<User> create(@Valid @RequestBody User obj) {
+    @PostMapping    
+    public ResponseEntity<User> create(@Validated(Create.class) @RequestBody User obj) {
         obj = userService.insert(obj);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
@@ -57,10 +55,9 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    @Validated(UpdateUser.class)
     public ResponseEntity<User> update(
             @PathVariable @Min(1) Long id,
-            @Valid @RequestBody User obj) {
+            @Validated(Update.class) @RequestBody User obj) {
         obj = userService.update(id, obj);
         return ResponseEntity.ok().body(obj);
     }
