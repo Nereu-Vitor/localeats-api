@@ -34,14 +34,20 @@ public class ProductController {
     public ResponseEntity<List<Product>> findAll() {
         List<Product> list = productService.findAll();
         return ResponseEntity.ok().body(list);
-    }    
-    
+    }
+
+    @GetMapping("/active")
+    public ResponseEntity<List<Product>> findAllActive() {
+        List<Product> list = productService.findAllActive();
+        return ResponseEntity.ok().body(list);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Product> findById(@PathVariable @Min(1) Long id) {
         Product obj = productService.findById(id);
         return ResponseEntity.ok().body(obj);
     }
-    
+
     @PostMapping
     public ResponseEntity<Product> create(@Valid @RequestBody Product obj) {
         obj = productService.insert(obj);
@@ -54,12 +60,12 @@ public class ProductController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Product> update(
-            @PathVariable @Min(1) Long id, 
+            @PathVariable @Min(1) Long id,
             @Valid @RequestBody Product obj) {
         obj = productService.update(id, obj);
         return ResponseEntity.ok().body(obj);
     }
-   
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable @Min(1) Long id) {
         productService.delete(id);

@@ -23,6 +23,11 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
+    public List<Product> findAllActive() {
+        return productRepository.findByActiveTrue();
+    }
+
+    @Transactional(readOnly = true)
     public Product findById(Long id) {
         return productRepository.findById(id)
                 .orElseThrow(() -> new ObjectNotFoundException(
@@ -43,8 +48,9 @@ public class ProductService {
 
     @Transactional
     public void delete(Long id) {
-        Product entity = findById(id);
-        productRepository.delete(entity);
+        Product obj = findById(id);
+        obj.setActive(false);
+        productRepository.save(obj);
     }
 
     private void updateData(Product entity, Product obj) {
