@@ -37,6 +37,18 @@ public class OrderController {
         return ResponseEntity.ok().body(list);
     }
 
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<Order>> findByUser(@PathVariable @Min(1) Long userId) {
+        List<Order> list = orderService.findByUser(userId);
+        return ResponseEntity.ok().body(list);
+    }
+
+    @GetMapping("/dashboard")
+    public ResponseEntity<List<Order>> findPendingOrders() {
+        List<Order> list = orderService.findPendingOrders();
+        return ResponseEntity.ok().body(list);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Order> findById(@PathVariable @Min(1) Long id) {
         Order obj = orderService.findById(id);
