@@ -2,11 +2,13 @@ package com.nereuvitor.localeatsapi.services;
 
 import java.util.List;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.nereuvitor.localeatsapi.models.Address;
 import com.nereuvitor.localeatsapi.repositories.AddressRepository;
+import com.nereuvitor.localeatsapi.services.exceptions.DataBaseException;
 import com.nereuvitor.localeatsapi.services.exceptions.ObjectNotFoundException;
 
 import lombok.RequiredArgsConstructor;
@@ -43,8 +45,16 @@ public class AddressService {
 
     @Transactional
     public void delete(Long id) {
-        Address obj = findById(id);
-        addressRepository.delete(obj);
+        
+        if (!addressRepository.existsById(id)) {
+            throw new ObjectNotFoundException("Endereço não encontrado! Id: " + id);
+        }
+
+        try {
+            addressRepository.deleteById(id);            
+        } catch (DataIntegrityViolationException e) {
+            throw new DataBaseException("Não é possível excluir o endereço pois ele está vinculado a um usuário ou pedido ativo.");
+        }        
     }
 
     private void updateData(Address entity, Address obj) {

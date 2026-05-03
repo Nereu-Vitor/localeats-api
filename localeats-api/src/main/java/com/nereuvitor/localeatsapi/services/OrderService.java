@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +16,7 @@ import com.nereuvitor.localeatsapi.models.Product;
 import com.nereuvitor.localeatsapi.models.User;
 import com.nereuvitor.localeatsapi.models.enums.OrderStatus;
 import com.nereuvitor.localeatsapi.repositories.OrderRepository;
+import com.nereuvitor.localeatsapi.services.exceptions.DataBaseException;
 import com.nereuvitor.localeatsapi.services.exceptions.ObjectNotFoundException;
 
 import lombok.RequiredArgsConstructor;
@@ -100,8 +102,17 @@ public class OrderService {
 
     @Transactional
     public void delete(Long id) {
-        Order entity = findById(id);
-        orderRepository.delete(entity);
+
+        if (!orderRepository.existsById(id)) {
+            new ObjectNotFoundException("Pedido não encontrado! Id: " + id);
+        }
+
+        try {
+            orderRepository.deleteById(id);
+        } catch (DataIntegrityViolationException e) {
+            throw new DataBaseException(
+                    "Não é possível excluir o pedido pois ele possui itens ou registros de pagamento vinculados.");
+        }
     }
 
     private BigDecimal calculateFee(String neighborhood) {
