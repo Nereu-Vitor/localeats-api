@@ -1,10 +1,10 @@
 package com.nereuvitor.localeatsapi.services.exceptions;
 
-public class ObjectNotFoundException extends RuntimeException {
+public class DataBaseException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
 
-    public ObjectNotFoundException(String message) {
+    public DataBaseException(String message) {
         super(message);
     }
 }
