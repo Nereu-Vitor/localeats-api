@@ -4,6 +4,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -60,7 +61,7 @@ public class GlobalExceptionHandler {
         }
 
         return ResponseEntity.status(status).body(err);
-    }    
+    }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<StandardError> dataIntegrity(DataIntegrityViolationException e, HttpServletRequest request) {
@@ -99,6 +100,20 @@ public class GlobalExceptionHandler {
                 status.value(),
                 "Não Encontrado",
                 e.getMessage(),
+                request.getRequestURI());
+
+        return ResponseEntity.status(status).body(err);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<StandardError> accessDenied(AccessDeniedException e, HttpServletRequest request) {
+        HttpStatusCode status = HttpStatus.FORBIDDEN;
+
+        StandardError err = new StandardError(
+                System.currentTimeMillis(),
+                status.value(),
+                "Acesso Negado",
+                "Você não tem permissão para acessar este recurso no LocalEats.",
                 request.getRequestURI());
 
         return ResponseEntity.status(status).body(err);
