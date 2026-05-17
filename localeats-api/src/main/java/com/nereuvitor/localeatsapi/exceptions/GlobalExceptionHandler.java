@@ -23,7 +23,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<StandardError> validation(MethodArgumentNotValidException e, HttpServletRequest request) {
         HttpStatusCode status = HttpStatus.UNPROCESSABLE_CONTENT;
 
-        StandardError error = new StandardError(
+        StandardError err = new StandardError(
                 System.currentTimeMillis(),
                 status.value(),
                 "Erro de Validação",
@@ -31,12 +31,12 @@ public class GlobalExceptionHandler {
                 request.getRequestURI());
 
         for (FieldError field : e.getBindingResult().getFieldErrors()) {
-            error.getErrors().add(new ValidationError(
+            err.getErrors().add(new ValidationError(
                     field.getField(),
                     field.getDefaultMessage()));
         }
 
-        return ResponseEntity.status(status).body(error);
+        return ResponseEntity.status(status).body(err);
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
@@ -44,7 +44,7 @@ public class GlobalExceptionHandler {
             HttpServletRequest request) {
         HttpStatusCode status = HttpStatus.UNPROCESSABLE_CONTENT;
 
-        StandardError error = new StandardError(
+        StandardError err = new StandardError(
                 System.currentTimeMillis(),
                 status.value(),
                 "Erro de Validação",
@@ -54,61 +54,61 @@ public class GlobalExceptionHandler {
         for (ConstraintViolation<?> violation : e.getConstraintViolations()) {
             String fieldName = violation.getPropertyPath().toString();
             String message = violation.getMessage();
-            error.getErrors().add(new ValidationError(
+            err.getErrors().add(new ValidationError(
                     fieldName,
                     message));
         }
 
-        return ResponseEntity.status(status).body(error);
+        return ResponseEntity.status(status).body(err);
     }    
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<StandardError> dataIntegrity(DataIntegrityViolationException e, HttpServletRequest request) {
         HttpStatusCode status = HttpStatus.CONFLICT;
 
-        StandardError error = new StandardError(
+        StandardError err = new StandardError(
                 System.currentTimeMillis(),
                 status.value(),
                 "Violação de Integridade",
-                "Não é possível realizar está operação. O dado enviado já existe ou possui vinculos ativos no LocalEats.",
+                "Não é possível realizar está operação. O e-mail ou dados informados já estão cadastrados no LocalEats.",
                 request.getRequestURI());
 
-        return ResponseEntity.status(status).body(error);
+        return ResponseEntity.status(status).body(err);
     }
 
     @ExceptionHandler(DataBaseException.class)
     public ResponseEntity<StandardError> dataBase(DataBaseException e, HttpServletRequest request) {
         HttpStatusCode status = HttpStatus.BAD_REQUEST;
 
-        StandardError error = new StandardError(
+        StandardError err = new StandardError(
                 System.currentTimeMillis(),
                 status.value(),
                 "Erro de Integridade",
                 e.getMessage(),
                 request.getRequestURI());
 
-        return ResponseEntity.status(status).body(error);
+        return ResponseEntity.status(status).body(err);
     }
 
     @ExceptionHandler(ObjectNotFoundException.class)
     public ResponseEntity<StandardError> objectNotFound(ObjectNotFoundException e, HttpServletRequest request) {
         HttpStatusCode status = HttpStatus.NOT_FOUND;
 
-        StandardError error = new StandardError(
+        StandardError err = new StandardError(
                 System.currentTimeMillis(),
                 status.value(),
                 "Não Encontrado",
                 e.getMessage(),
                 request.getRequestURI());
 
-        return ResponseEntity.status(status).body(error);
+        return ResponseEntity.status(status).body(err);
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<StandardError> handleGenericException(Exception e, HttpServletRequest request) {
         HttpStatusCode status = HttpStatus.INTERNAL_SERVER_ERROR;
 
-        StandardError error = new StandardError(
+        StandardError err = new StandardError(
                 System.currentTimeMillis(),
                 status.value(),
                 "Erro Interno",
@@ -117,7 +117,7 @@ public class GlobalExceptionHandler {
 
         e.printStackTrace();
 
-        return ResponseEntity.status(status).body(error);
+        return ResponseEntity.status(status).body(err);
     }
 
 }
