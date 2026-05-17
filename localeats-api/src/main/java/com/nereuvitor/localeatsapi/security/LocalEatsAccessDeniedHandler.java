@@ -4,23 +4,22 @@ import java.io.IOException;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.web.access.AccessDeniedHandler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import com.nereuvitor.localeatsapi.exceptions.StandardError;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-public class JWTAuthenticationFailureHandler implements AuthenticationFailureHandler {
+public class LocalEatsAccessDeniedHandler implements AccessDeniedHandler {
 
     @Override
-    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
-            AuthenticationException exception) throws IOException, ServletException {
-        HttpStatusCode status = HttpStatus.UNAUTHORIZED;
+    public void handle(HttpServletRequest request, HttpServletResponse response,
+            AccessDeniedException accessDeniedException) throws IOException, ServletException {
+        HttpStatusCode status = HttpStatus.FORBIDDEN;
 
         response.setStatus(status.value());
         response.setContentType("application/json;charset=UTF-8");
@@ -28,8 +27,8 @@ public class JWTAuthenticationFailureHandler implements AuthenticationFailureHan
         StandardError err = new StandardError(
                 System.currentTimeMillis(),
                 status.value(),
-                "Não autorizado",
-                "E-mail ou senha inválidos.",
+                "Acesso Negado",
+                "Você não tem permissão para acessar este recurso no LocalEats.",
                 request.getRequestURI());
 
         ObjectMapper mapper = new ObjectMapper();
