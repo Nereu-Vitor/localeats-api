@@ -16,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 import com.nereuvitor.localeatsapi.security.JWTAuthenticationFilter;
+import com.nereuvitor.localeatsapi.security.JWTAuthorizationFilter;
 import com.nereuvitor.localeatsapi.security.JWTUtil;
 
 import lombok.RequiredArgsConstructor;
@@ -30,7 +31,7 @@ public class SecurityConfig {
     private final UserDetailsService userDetailsService;
     private final AuthenticationConfiguration authenticationConfiguration;
 
-    private static final String[] PUBLIC_MATCHERS = {
+    private static final String[] PUBLIC_MATCHERS_POST = {
             "/users",
             "/login"
     };
@@ -50,8 +51,10 @@ public class SecurityConfig {
 
         http.addFilter(new JWTAuthenticationFilter(authenticationManager, jwtUtil));
 
+        http.addFilter(new JWTAuthorizationFilter(authenticationManager, jwtUtil, userDetailsService));
+
         http.authorizeHttpRequests(auth -> auth
-                .requestMatchers(PUBLIC_MATCHERS).permitAll()
+                .requestMatchers(HttpMethod.POST, PUBLIC_MATCHERS_POST).permitAll()
                 .requestMatchers(HttpMethod.GET, PUBLIC_MATCHERS_GET).permitAll()
                 .anyRequest().authenticated());
 
