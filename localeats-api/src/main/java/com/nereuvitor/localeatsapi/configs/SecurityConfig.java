@@ -18,6 +18,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import com.nereuvitor.localeatsapi.security.JWTAuthenticationFilter;
 import com.nereuvitor.localeatsapi.security.JWTAuthorizationFilter;
 import com.nereuvitor.localeatsapi.security.JWTUtil;
+import com.nereuvitor.localeatsapi.security.LocalEatsAccessDeniedHandler;
+import com.nereuvitor.localeatsapi.security.LocalEatsAuthenticationEntryPoint;
 
 import lombok.RequiredArgsConstructor;
 
@@ -46,11 +48,13 @@ public class SecurityConfig {
         AuthenticationManager authenticationManager = authenticationConfiguration.getAuthenticationManager();
 
         http.csrf(csrf -> csrf.disable());
-
         http.cors(Customizer.withDefaults());
 
-        http.addFilter(new JWTAuthenticationFilter(authenticationManager, jwtUtil));
+        http.exceptionHandling(exception -> exception
+                .accessDeniedHandler(new LocalEatsAccessDeniedHandler())
+                .authenticationEntryPoint(new LocalEatsAuthenticationEntryPoint()));               
 
+        http.addFilter(new JWTAuthenticationFilter(authenticationManager, jwtUtil));
         http.addFilter(new JWTAuthorizationFilter(authenticationManager, jwtUtil, userDetailsService));
 
         http.authorizeHttpRequests(auth -> auth
